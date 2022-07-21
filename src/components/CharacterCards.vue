@@ -1,35 +1,35 @@
 <script setup>
-import orderBy from "lodash/orderby";
-import { computed, onMounted, ref } from "vue";
-import { useFetchResources } from "@/composables/useFetchResources";
-import { useGlobalEvent } from "@/composables/useGlobalEvent";
+import orderBy from 'lodash/orderby'
+import { computed, onMounted, ref } from 'vue'
+import { useFetchResources } from '@/composables/useFetchResources'
+import { useGlobalEvent } from '@/composables/useGlobalEvent'
 
 const {
   data: characters,
   loadingState: loadingCharacters,
-  fetchResources: fetchAllCharacters,
-} = useFetchResources();
+  fetchResources: fetchAllCharacters
+} = useFetchResources()
 
 const {
   data: locations,
   loadingState: loadingLocations,
-  fetchResources: fetchAllLocations,
-} = useFetchResources();
+  fetchResources: fetchAllLocations
+} = useFetchResources()
 
-const orderKey = ref("id");
-const setOrderKey = (key) => (orderKey.value = key);
+const orderKey = ref('id')
+const setOrderKey = (key) => (orderKey.value = key)
 const charactersOrdered = computed(() =>
   orderBy(characters.value, orderKey.value)
-);
+)
 
-useGlobalEvent("keydown", () => {
-  characters.value.shift();
-});
+useGlobalEvent('keydown', () => {
+  characters.value.shift()
+})
 
 onMounted(() => {
-  fetchAllCharacters("https://rickandmortyapi.com/api/character");
-  fetchAllLocations("https://rickandmortyapi.com/api/location");
-});
+  fetchAllCharacters('https://rickandmortyapi.com/api/character')
+  fetchAllLocations('https://rickandmortyapi.com/api/location')
+})
 </script>
 
 <template>

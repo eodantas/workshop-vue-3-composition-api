@@ -1,8 +1,8 @@
 <script setup>
-import HelloWorld from "@/components/HelloWorld.vue";
-import VideoPlayer from "@/components/VideoPlayer.vue";
-import { ref } from "vue";
-const show = ref(false);
+import HelloWorld from '@/components/HelloWorld.vue'
+import VideoPlayer from '@/components/VideoPlayer.vue'
+import { ref } from 'vue'
+const show = ref(false)
 </script>
 
 <template>

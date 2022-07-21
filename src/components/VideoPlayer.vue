@@ -1,36 +1,36 @@
 <script setup>
-import { ref } from "vue";
-import { useGlobalEvent } from "@/composables/useGlobalEvent";
+import { ref } from 'vue'
+import { useGlobalEvent } from '@/composables/useGlobalEvent'
 
 const props = defineProps({
-  source: { type: String, required: true },
-});
+  source: { type: String, required: true }
+})
 
-useGlobalEvent("keydown", (e) => {
-  e.preventDefault();
-  if (e.code !== "Space") {
-    return;
+useGlobalEvent('keydown', (e) => {
+  e.preventDefault()
+  if (e.code !== 'Space') {
+    return
   }
   if (video.value.paused) {
-    video.value.play();
-    labelButton.value = "Pause";
+    video.value.play()
+    labelButton.value = 'Pause'
   } else {
-    video.value.pause();
-    labelButton.value = "Play";
+    video.value.pause()
+    labelButton.value = 'Play'
   }
-});
+})
 
-const video = ref(null);
-const labelButton = ref("Play");
+const video = ref(null)
+const labelButton = ref('Play')
 const playPause = () => {
-  if (labelButton.value === "Play") {
-    video.value.play();
-    labelButton.value = "Pause";
+  if (labelButton.value === 'Play') {
+    video.value.play()
+    labelButton.value = 'Pause'
   } else {
-    video.value.pause();
-    labelButton.value = "Play";
+    video.value.pause()
+    labelButton.value = 'Play'
   }
-};
+}
 </script>
 
 <template>
