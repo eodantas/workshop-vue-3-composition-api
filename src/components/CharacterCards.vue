@@ -1,3 +1,37 @@
+<script setup>
+import orderBy from "lodash/orderby";
+import { computed, onMounted, ref } from "vue";
+import { useFetchResources } from "@/composables/useFetchResources";
+import { useGlobalEvent } from "@/composables/useGlobalEvent";
+
+const {
+  data: characters,
+  loadingState: loadingCharacters,
+  fetchResources: fetchAllCharacters,
+} = useFetchResources();
+
+const {
+  data: locations,
+  loadingState: loadingLocations,
+  fetchResources: fetchAllLocations,
+} = useFetchResources();
+
+const orderKey = ref("id");
+const setOrderKey = (key) => (orderKey.value = key);
+const charactersOrdered = computed(() =>
+  orderBy(characters.value, orderKey.value)
+);
+
+useGlobalEvent("keydown", () => {
+  characters.value.shift();
+});
+
+onMounted(() => {
+  fetchAllCharacters("https://rickandmortyapi.com/api/character");
+  fetchAllLocations("https://rickandmortyapi.com/api/location");
+});
+</script>
+
 <template>
   <div>
     <div class="border-b-2 pb-4 border-gray-300 text-center">
@@ -33,52 +67,30 @@
       </div>
     </div>
 
-    <div v-if="loadingState === 'loading'" class="loading">
-      <span class="text-gray-500">Loading characters...</span>
+    <div class="text-center text-[40px]">LOCATIONS</div>
+    <div class="m-auto container flex flex-wrap gap-4 justify-between">
+      <div
+        v-for="location in locations"
+        :key="location.id"
+        class="p-2 shadow-md shadow-black"
+      >
+        <li class="ml-4">NAME: {{ location.name }}</li>
+        <li class="ml-4">TYPE: {{ location.type }}</li>
+        <li class="ml-4">DIMENSION: {{ location.dimension }}</li>
+      </div>
+    </div>
+
+    <div
+      v-if="loadingCharacters === 'loading' || loadingLocations === 'loading'"
+      class="loading"
+    >
+      <span class="text-gray-500">Loading...</span>
       <img src="/spinner.svg" alt="loading" />
     </div>
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import orderBy from "lodash/orderby";
-export default {
-  data() {
-    return {
-      characters: [],
-      loadingState: null,
-      orderKey: "id",
-    };
-  },
-  computed: {
-    charactersOrdered() {
-      return orderBy(this.characters, this.orderKey);
-    },
-  },
-  methods: {
-    setOrderKey(key) {
-      this.orderKey = key;
-    },
-    fetchAllCharacters() {
-      this.loadingState = "loading";
-      axios
-        .get("https://rickandmortyapi.com/api/character")
-        .then((response) => {
-          setTimeout(() => {
-            this.loadingState = "success";
-            this.characters = response.data.results;
-          }, 1000);
-        });
-    },
-  },
-  created() {
-    this.fetchAllCharacters();
-  },
-};
-</script>
-
-<style scoped>
+<style scoped lang="postcss">
 .btn {
   @apply px-6 py-1 text-white rounded;
 }
